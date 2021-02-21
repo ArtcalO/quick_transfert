@@ -17,18 +17,18 @@
 <section class="admin-section spad bg-secondary mt-5"  id="sectionTag">
         <div class="container p-3 bg-white border">
                 <div class="table-responsive">
-                  <h2 class="sub-header mb-3">Demandes en cours</h2>
+                  <h2 class="sub-header mb-3">Requests</h2>
                   <input class="form-control mb-3" id="search" type="text" placeholder="Search..">
                     <table class="table table-striped table-hover">
                       <thead>
                         <tr>
-                            <th>Expediteur</th>
-                            <th>Destinataire</th>
-                            <th>A Recuperer</th>
-                            <th>A Envoyer</th>
-                            <th>Livraison</th>
+                            <th>Sender</th>
+                            <th>Reciever</th>
+                            <th>Contatact reciever</th>
+                            <th>Money recieved</th>
+                            <th>Money to send</th>
                             <th>Actions</th>
-                            <th>Details</th>
+                            <th>View</th>
                             <th>From</th>
                             <th>To</th>
                         </tr>  
@@ -40,52 +40,36 @@
                             {% endif %}>
                                 <td >{{ tracking.senderFullName }}</td>
                                 <td >{{ tracking.recieverFullName }}</td>
+                                <td >{{ tracking.phone_reciever }}</td>
                                 <td >
-                                    {% if not tracking.amount_in_recieve %}
-                                        {{ tracking.montantDepart }} : cl
+                                    {% if tracking.montantRecuAdmin %}
+                                        {{ tracking.montantDepart }}
                                     {% else %}
                                         {{ tracking.montantRecuAdmin }}
                                     {% endif %}
-                                    
                                 </td>
                                 <td >
-                                    {% if tracking.amount_out_deliver  %}
-                                        {{ tracking.montantArriveAdmin }}
+                                {% if  tracking.montantArriveAdmin %}
+                                        {{ tracking.montantArrive }}
                                     {% else %}
-                                        {{ tracking.montantArrive }} : cl
-                                    {% endif %}
-                                </td>
-                                <td >
-                                    {% if tracking.lumicash %}
-                                        Lumicash : {{ tracking.lumicash }}
-                                    {% endif %}
-                                    {% if tracking.ecocash %}
-                                        Ecocash : {{ tracking.ecocash }}
-                                    {% endif %}
-
-                                    {% if tracking.account_number %}
-                                        Compte : {{ tracking.account_number }}
-                                    {% endif %}
-
-                                    {% if tracking.tel_livraison %}
-                                        Livraison : {{ tracking.tel_livraison }}
+                                        {{ tracking.montantArriveAdmin }}
                                     {% endif %}
                                 </td>
                                 <td >
                                     {% if  not tracking.validated1 %}
-                                        <a href="{% url 'recu' tracking.id %}" class="btn btn-primary btn-sm">Valider recu</a>
+                                        <a href="{% url 'recu' tracking.id %}" class="btn btn-primary btn-sm">Receive validation</a>
                                         
                                     {% endif %}
                                     {% if tracking.validated1 and not tracking.validated2 %}
-                                        <a href="{% url 'envoi' tracking.id %}" class="btn btn-primary btn-sm">Valider livraison</a>
+                                        <a href="{% url 'envoi' tracking.id %}" class="btn btn-primary btn-sm">Send Validation</a>
                                     {% endif %}
                                     {% if tracking.validated1 and tracking.validated2 %}
-                                        <div  class="btn btn-success btn-sm" >Déja Validé</div>
+                                        <div  class="btn btn-success btn-sm" >Validated</div>
                                     {% endif %}
                                     </td>
                                 <td >
                                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#pendingModal{{ tracking.id }}">
-                                Voir
+                                View
                               </button>
                                 </td>
                                 <td >
@@ -110,7 +94,7 @@
 
                                       <!-- Modal Header -->
                                       <div class="modal-header">
-                                        <h4 class="modal-title">Tranfert N°{{ tracking.id }}</h4>
+                                        <h4 class="modal-title">Tranfer N°{{ tracking.id }}</h4>
                                          <span type="button" class="close" data-dismiss="modal" aria-label="Close">x</span>
                                       </div>
 
@@ -123,10 +107,10 @@
                                                     <strong>{{ tracking.date }}</strong> 
                                                     <span class="float-right"> <strong>Status:</strong>
                                                         {% if not tracking.validated1  or not tracking.validated2 %}
-                                                            Non validé
+                                                            Unvalidated
                                                         {% endif %}
                                                         {% if  tracking.validated2 %}
-                                                            Validé
+                                                            Validated
                                                         {% endif %}
                                                      </span>
 
@@ -134,20 +118,22 @@
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-sm-6">
-                                                            <h6 class="mb-1">De la part de :</h6>
+                                                            <h6 class="mb-1">From</h6>
                                                             <div>
                                                                 <strong>{{ tracking.senderFullName }}</strong>
                                                             </div>
                                                             <hr>
-                                                            <div>Tel : {{ tracking.phone_sender }}</div>
+                                                            <div>Phone : {{ tracking.phone_sender }}</div>
                                                         </div>
 
                                                         <div class="col-sm-6">
-                                                            <h6 >Vers : </h6>
+                                                            <h6 >To : </h6>
                                                             <div>
                                                                 <strong>{{ tracking.recieverFullName }}</strong>
                                                             </div>
                                                             <hr>
+                                                            <div>Phone : {{ tracking.phone_reciever }}</div>
+                                                            <div>Alt Phone : {{ tracking.alt_phone_reciever }}</div>
                                                             
                                                             
                                                         </div>
@@ -155,37 +141,9 @@
                                                 </div>
                                             </div>
                                             <hr>
-                                            <p>Montant envoyé client :......................... <strong>{{ tracking.montantDepart }}</strong></p>
-                                            <p>Montant à rendre :......................... <strong>{{ tracking.montantArrive }}</strong></p>
-                                            <hr>
 
-                                            <p>Montant recu admin :......................... <strong>{{ tracking.montantRecuAdmin }}</strong></p>
-                                            <p>Montant à rendre :......................... <strong>{{ tracking.montantArriveAdmin }}</strong></p>
-                                            <hr>
-
-                                            <p>Detail Transfert</p>
-                                            {% if tracking.lumicash %}
-
-                                                <p>Lumicash :......................... <strong>{{ tracking.lumicash }}</strong></p>
-                                                <p>Nom lumicash :......................... <strong>{{ tracking.lumicash_holder }}</strong></p>
-
-                                            {% endif %}
-                                            {% if tracking.ecocash %}
-                                                <p>Lumicash :......................... <strong>{{ tracking.ecocash }}</strong></p>
-                                                <p>Nom ecocash :......................... <strong>{{ tracking.ecocash_holder }}</strong></p>
-                                            {% endif %}
-
-                                            {% if tracking.account_number %}
-                                                <p>N° Compte :......................... <strong>{{ tracking.account_number }}</strong></p>
-                                                <p>Nom Compte :......................... <strong>{{ tracking.account_holder }}</strong></p>
-                                                <p>Nom Banque :......................... <strong>{{ tracking.bank_name }}</strong></p>
-                                            {% endif %}
-
-                                            {% if tracking.tel_livraison %}
-                                                <p>Tel. Livraison :.........................<strong>{{ tracking.tel_livraison }}</strong></p>
-                                            {% endif %}
-                                            </div>
                                         </div>
+                                    </div>
                                     </div>
                                   </div>
                                 </div>
@@ -198,7 +156,7 @@
                 <nav aria-label="...">
                   <ul class="pagination justify-content-end">
                     <li class="page-item">
-                            <a href="?page=1#sectionTag" class="page-link">debut</a>
+                            <a href="?page=1#sectionTag" class="page-link">first</a>
                     </li>
                     {% if page_obj.has_previous %}
 
@@ -208,7 +166,7 @@
                     {% endif %}
                     <li class="page-item active">
                       <span class="page-link">
-                        Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
                         <span class="sr-only"></span>
                       </span>
                     </li>
@@ -218,7 +176,7 @@
                         </li>
                     {% endif %}
                     <li class="page-item">
-                            <a href="?page={{ page_obj.paginator.num_pages }}#sectionTag" class="page-link">dernier</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}#sectionTag" class="page-link">last</a>
                     </li>
                     
                   </ul>

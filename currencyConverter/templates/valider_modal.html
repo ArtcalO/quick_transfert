@@ -19,7 +19,7 @@
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Veillez Confirmer</h4>
+          <h4 class="modal-title">Carefully confirm</h4>
         </div>
 
         <!-- Modal body -->
@@ -27,8 +27,8 @@
             <form method="post" action="{% url 'recu' track.id %}" class="form-signin">
               {% csrf_token %}
                   {{ valid_form.as_p }}
-                <input class="btn btn-danger" type="submit" name="ecoform" value="Oui et Valider">
-                <p>NB: Cet action est irreversible</p>
+                <input class="btn btn-danger" type="submit" name="ecoform" value="Yes and validate">
+                
               </form> 
         </div>
 

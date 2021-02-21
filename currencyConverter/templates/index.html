@@ -68,22 +68,20 @@
 		</a>
 		<nav class="header-nav">
 			<ul class="main-menu">
-				<li><a href="{% url 'home' %}" class="active">Accueil</a></li>
-				<li><a href="{% url 'contact' %}">Contact</a></li>
-				<li><a href="{% url 'about' %}">A propos de nous</a></li>
+				<li><a href="{% url 'home' %}" class="active">Home</a></li>
 				{% if user.is_authenticated and user.is_superuser %}
-					<li><a href="{% url 'requests' %}">Demandes</a></li>
-					<li><a href="{% url 'admin' %}">Taux</a></li>
-					<li><a href="{% url 'logout' %}">Deconnexion</a></li>
+					<li><a href="{% url 'requests' %}">Requests</a></li>
+					<li><a href="{% url 'admin' %}">Rate</a></li>
+					<li><a href="{% url 'logout' %}">Logout</a></li>
 				{% endif %}
 				
 			</ul>
 
 			<div class="header-right">
 				<div class="hr-btn hr-btn-2">
-					<a href="https://api.whatsapp.com/send?phone=+1 (438) 928-4750" target="_blank" class="text-white">
+					<a href="https://api.whatsapp.com/send?phone=+4793930866" target="_blank" class="text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                      +1 (438) 928-4750</a></div>
+                      +4793930866</a></div>
 			</div>
 		</nav>
 	</header>
@@ -105,21 +103,23 @@
 					
 				<div class="col-lg-6">
 					<div class="hs-text">
-						<h2><strong><i class="fa fa-bell"></i>Instant Transfer</strong></h2>
+						<h2><strong><i class="fa fa-bell"></i>Quick Transfer</strong></h2>
 						<p>
-							Transférer de l'argent d'un pays à un autre n'a jamais été facile surtout à cause du taux de transfert élevé et une longue période d'attente.</br> Recevez et envoyez de l'argent facilement et rapidement avec <span class="color-primary">Instant Transfer.</span>
+							Send money from one country to another has never been easy especially
+							because of the high transfer rate and long waiting period.
+							Receive and send money easily and quickly with <span class="color-primary">Quick Transfer.</span>
 						</p>
 
 
 						<p>
-						  <button class="site-btn" type="button" >Taux : {{sender.usd_value}} {{sender.currency}} = {{rc_value}} {{reciever.currency}}</button>
+						  <button class="site-btn" type="button" >Rate : {{sender.usd_value}} {{sender.currency}} = {{rc_value}} {{reciever.currency}}</button>
 						</p>
 						<p>
 						  	
 						<div class="site-btn">
-							<a href="https://api.whatsapp.com/send?phone=+1 (438) 928-4750" class="text-white">
+							<a href="https://api.whatsapp.com/send?phone=+4793930866" class="text-white">
 		                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-		                      +1 (438) 928-4750</a></div>
+		                      +4793930866</a></div>
 						</p>
 					
 					</div>
@@ -132,10 +132,10 @@
 				<div class="col-lg-6">
 					<div class="row mb-2">
 						    <div class="col">
-						      <button type="button" id="wantSendBtn" class=" form-control btn btn-success btn-sm" >Je veux envoyer</button>
+						      <button type="button" id="wantSendBtn" class=" form-control btn btn-success btn-sm" >I want to send</button>
 						    </div>
 						    <div class="col">
-						      <button type="button" id="wantRecieveBtn" class=" form-control btn btn-success btn-sm">Qu'il/elle recoive</button>
+						      <button type="button" id="wantRecieveBtn" class=" form-control btn btn-success btn-sm">I want him/her to recieve</button>
 						    </div>
 						</div>
 					<!--SEND FORM-->
@@ -154,13 +154,13 @@
 							</div>
 							<div class="row mb-2"  >
 								<div class="col" >
-									<div id="messageSender" style="display:none;" class="text-white mb-2" >Il/Elle recevra : </div>
+									<div id="messageSender" style="display:none;" class="text-white mb-2" >He/She will receive : </div>
 									<div id="displaySend" class="btn btn-light btn-block" >0</div>
 								</div>
 							</div>
 						</div>
-						<input  type="submit" name="send" value="Interessée? Passez à l'action en cliquant ici !" class="btn btn-primary btn-block text-white mt-2">
-						<a  type="button" href="{% url "home" %}" class="btn btn-outline-danger text-white mt-2 btn-block">Cliquer pour Actualiser le taux</a>
+						<input  type="submit" name="send" value="Interested ? Click here to send" class="btn btn-primary btn-block text-white mt-2">
+						<a  type="button" href="{% url "home" %}" class="btn btn-outline-danger text-white mt-2 btn-block">Click to be sure you use the updated rate</a>
 					</form>
 					<!-- RECIEVE FORM -->
 
@@ -180,13 +180,13 @@
 							</div>
 							<div class="row mb-2" >
 								<div class="col" >
-									<div id="messageReciever" style="display:none;" class="text-white mb-2" >Tu devras envoyer : </div>
+									<div id="messageReciever" style="display:none;" class="text-white mb-2" >You will have to send : </div>
 									<div id="displayReciever" class="btn btn-light btn-block" >0</div>
 								</div>
 							</div>
 						</div>
-						<input  type="submit" name="recieve" value="Interessée? Passez à l'action en cliquant ici !" class="btn btn-primary btn-block text-white mt-2">
-						<a  type="button" href="{% url "home" %}" class="btn btn-outline-danger text-white mt-2 btn-block">Cliquer pour Actualiser le taux</a>
+						<input  type="submit" name="recieve" value="Interested ? Click here to send" class="btn btn-primary btn-block text-white mt-2">
+						<a  type="button" href="{% url "home" %}" class="btn btn-outline-danger text-white mt-2 btn-block">Click to be sure you use the updated rate</a>
 					</form>
 				</div>
 
@@ -207,7 +207,8 @@
 	<section class="why-section spad">
 		<div class="container">
 			<div class="text-center mb-5 pb-4">
-				<h2>Pourqoui choisir <span class="color-primary">Instant Transfer?</span></h2>
+
+				<h2>Why choose <span class="color-primary">Quick Transfer ?</span></h2>
 			</div>
 			<div class="row">
 				<div class="col-md-4">
@@ -216,8 +217,8 @@
 							<i class="flaticon-012-24-hours"></i>
 						</div>
 						<div class="ib-text">
-							<h5>Instant Transfer</h5>
-							<p>Avec nous, le transfert d'argent du Canada au Burundi est simple,rapide et facile. </p>
+							<h5>Quick Transfer</h5>
+							<p>With us transferring money from Norway to Burundi is quick, simple and easy </p>
 						</div>
 					</div>
 				</div>
@@ -227,8 +228,8 @@
 							<i class="flaticon-036-customer-service"></i>
 						</div>
 						<div class="ib-text">
-							<h5>Taux à faible coût</h5>
-							<p><span class="color-primary">Instant Transfer</span> offre un service de transfert efficace, et ce à un taux compétitif.</p>
+							<h5>Low Cost Rate </h5>
+							<p><span class="color-primary">Quick Transfer</span> offers an efficient transfer service at a competitive rate.</p>
 						</div>
 					</div>
 				</div>
@@ -238,14 +239,15 @@
 							<i class="flaticon-039-info"></i>
 						</div>
 						<div class="ib-text">
-							<h5>Comment ça marche?</h5>
-							<p>c'est simple. Calculez le montant à transferer en  utilisant notre calculateur en ligne puis faites votre transfert via interac au numero ****</p>
+							<h5>How it works ?</h5>
+							<p>Calculate the amount using our online calculator. Once You send the money,  complete informations of the receiver and 
+							Our Team will make  sure the reicever get the money in a record time.</p>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="text-center pt-3">
-				<a href="#tarrif" class="site-btn sb-big">Taux du jour</a>
+				<a href="#tarrif" class="site-btn sb-big">Today's rate</a>
 			</div>
 		</div>
 	</section>
@@ -256,9 +258,9 @@
 	<!-- CTA Section end -->
 	<section class="cta-section set-bg" data-setbg=" {% static 'img/cta-bg.jpg' %} ">
 		<div class="container">
-			<h3>Voulez vous savoir plus sur <strong class="color-primary">Instant Transfer</strong>?</h3>
-			<h5>contactez nous pour plus d'informations</h5>
-			<a href="#" class="site-btn sb-dark sb-big"><i class="flaticon-029-telephone-1"></i> +257 61 460 068</a>
+			<h3>Any question about <strong class="color-primary">Quick Transfer</strong>?</h3>
+			<h5>Get in touch for more informations</h5>
+			<a href="#" class="site-btn sb-dark sb-big"><i class="flaticon-029-telephone-1"></i>+4793930866</a>
 		</div>
 	</section>
 	<!-- CTA Section end -->
@@ -270,7 +272,7 @@
 			<div class="text-center">
 				
 			<span class="text-white text-center text-footer">
-			Copyright &copy;<script>document.write(new Date().getFullYear());</script> | <strong ><span class="text-danger">Instant</span> <span class="text-warning">Transfer</span> - Simple, Rapide & Economique</strong>				
+			Copyright &copy;<script>document.write(new Date().getFullYear());</script> | <strong ><span class="text-danger">Quick</span> <span class="text-warning">Transfer</span> - Simple, Fast & Economic</strong>				
 			</span>
 			</div>
 		</div>
