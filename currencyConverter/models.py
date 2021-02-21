@@ -32,27 +32,14 @@ class Tracking(models.Model):
 	# fielsd for sender
 
 	name_sender = models.CharField(max_length=100)
-	subname_sender = models.CharField(max_length=100)
 	phone_sender = models.CharField(max_length=100)
 
 	# fields for reciever
 
 	name_reciever = models.CharField(max_length=100)
-	subname_reciever = models.CharField(max_length=100)
 	phone_reciever = models.CharField(max_length=100)
+	alt_phone_reciever = models.CharField(max_length=100, null=True, blank=True)
 
-	# Livraison 
-
-	lumicash = models.FloatField(null=True, blank=True)
-	lumicash_holder = models.CharField(max_length=100)
-	ecocash = models.FloatField(null=True, blank=True)
-	ecocash_holder = models.CharField(max_length=100)
-
-	tel_livraison = models.IntegerField(null=True, blank=True)
-
-	account_number = models.IntegerField(null=True, blank=True)
-	account_holder = models.CharField(max_length=100)
-	bank_name = models.CharField(max_length=150)
 
 	validated1 = models.BooleanField(default=False)
 	motif_validated1 = models.TextField(blank=True, null=True, default='Rien')
@@ -65,10 +52,10 @@ class Tracking(models.Model):
 		return self.name_sender+' to '+self.name_reciever
 
 	def senderFullName(self):
-		return self.name_sender+' '+self.subname_sender
+		return self.name_sender
 
 	def recieverFullName(self):
-		return self.name_reciever+' '+self.subname_reciever
+		return self.name_reciever
 
 	def montantDepart(self):
 		return f"{self.amount_in} {self.currency_in.currency}"
