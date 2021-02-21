@@ -107,6 +107,7 @@
 
 			function senderAction(){
 				var amount = parseFloat($("#inputSender").val());
+				amount = amount-(amount*10/100);
 				if(amount){
 					$("#messageSender").show();
 					var values_sender = $("#fromToSender").val();
@@ -131,7 +132,10 @@
 					var values_sender_splited = splitValues(values_sender);
 					var value_from = reverseValue(values_sender_splited[0]);
 					var final_amount = amount/value_from;
-					$("#displayReciever").text(''+separatedNumber(final_amount.toFixed(2))+'	CAD');
+					final_amount = final_amount/0.12;
+					x = final_amount/90;
+					mt = x*100;
+					$("#displayReciever").text(''+separatedNumber(mt.toFixed(2))+'	NK');
 				}
 				else {
 					$("#displayReciever").text('0');

@@ -24,17 +24,15 @@ def index(request):
 	global amount_
 	template_name='index.html'
 	form = ConversionForm(request.POST)
-	sender = Country.objects.get(name="Canada")
+	sender = Country.objects.get(name="Norvege")
 	reciever = Country.objects.get(name="Burundi")
 	rc_value = reciever.usd_value.split('/')[1]
-	if "action" in request.POST:
-		if form.is_valid():
-			print(form.cleaned_data)
-			request.session['first_form'] = form.cleaned_data
-			amount_ = form.cleaned_data['amount']
-			return redirect(step1)
 	if "send" in request.POST:
 		amount = float(request.POST.get('inputsend'))
+		haveToSend = request.POST.get('haveToSend')
+		print("##################")
+		print(haveToSend)
+		print("##################")
 		data = {'country_from': sender.usd_value, 'country_to': reciever.usd_value, 'amount': amount}
 		request.session['first_form'] = data
 		amount_ = float(request.POST.get('inputsend'))
@@ -118,12 +116,12 @@ def step2(request):
 			)
 		tracking_obj.save()
 		if(tracking_obj):
-			messages.success(request, "Vos informations ont été envoyées avec success. Notre équipe se charge de la suite. N'hésitez surtout pas à nous contacter sur whatsapp si vous avez des questions")
+			messages.success(request, "Your information has been sent successfully. Our team takes care of the rest. Please do not hesitate to contact us on whatsapp if you have any questions")
 			return redirect(index)
 		else:
-			messages.error(request,"Une erreur de saisie est survenue, veuillez réessayer")
+			messages.error(request,"An entry error has occurred, please try again")
 			return redirect(index)
-			
+
 	return render(request, 'steps_forms.html', locals())
 
 
