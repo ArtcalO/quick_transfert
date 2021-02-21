@@ -12,7 +12,6 @@ from django.views.generic import ListView
 from django.core.paginator import Paginator
 
 amount_ = 0
-num_receveur = 0
 
 def splitData(data_string):
 	if '/' in data_string:
@@ -33,20 +32,20 @@ def index(request):
 			print(form.cleaned_data)
 			request.session['first_form'] = form.cleaned_data
 			amount_ = form.cleaned_data['amount']
-			return redirect(choice)
+			return redirect(step1)
 	if "send" in request.POST:
 		amount = float(request.POST.get('inputsend'))
 		data = {'country_from': sender.usd_value, 'country_to': reciever.usd_value, 'amount': amount}
 		request.session['first_form'] = data
 		amount_ = float(request.POST.get('inputsend'))
-		return redirect(choice)
+		return redirect(step1)
 
 	if "recieve" in request.POST:
 		amount = float(request.POST.get('inputrecieve'))
 		data = {'country_from': reciever.usd_value, 'country_to': sender.usd_value, 'amount': amount}
 		request.session['first_form'] = data
 		amount_ = float(request.POST.get('inputrecieve'))
-		return redirect(choice)
+		return redirect(step1)
 
 	return render(request, template_name, locals())
 
@@ -82,10 +81,6 @@ def validerEnvoie(request, id):
 	track.validated2 = True
 	track.save()
 	return redirect(requests)
-		
-def choice(request):
-	choice = True
-	return render(request, 'steps_forms.html', locals())
 
 def step1(request):
 	global amount_
@@ -98,157 +93,40 @@ def step1(request):
 	return render(request, 'steps_forms.html', locals())
 
 def step2(request):
-	global num_receveur
 	step_form2 = StepForm2(request.POST or None)
 	if step_form2.is_valid():
 		request.session['step_form2'] = step_form2.cleaned_data
-		num_receveur = step_form2.cleaned_data['number']
-		return redirect(step3)
-	return render(request, 'steps_forms.html', locals())
+		first_ = request.session.pop('first_form',{})
+		step_1 = request.session.pop('step_form1',{})
+		step_2 = request.session.pop('step_form2',{})
+		c_in = Country.objects.get(usd_value=first_['country_from'])
+		c_out = Country.objects.get(usd_value=first_['country_to'])
 
-def step3(request):
-	choice2 = True
-	global num_receveur
-	data = {'num_receveur':num_receveur}
-	ecocash_form=EcoCashForm(request.POST or None)
-	lumicash_form=LumiCashForm(request.POST or None)
-	livraison_form=LivraisonForm(request.POST or None, initial=data)
-	compte_form=CompteForm(request.POST or None)
-
-	if "ecoform" in request.POST:
-		if ecocash_form.is_valid():
-			eco_form = ecocash_form.cleaned_data
-			first_ = request.session.pop('first_form',{})
-			step_1 = request.session.pop('step_form1',{})
-			print(step_1)
-			step_2 = request.session.pop('step_form2',{})
-			c_in = Country.objects.get(usd_value=first_['country_from'])
-			c_out = Country.objects.get(usd_value=first_['country_to'])
-
-			tracking_obj = Tracking.objects.create(
-				currency_in=c_in,
-				currency_out=c_out,
-				amount_in=step_1['amount'],
-				amount_out=float(step_1['amount'])*(splitData(c_in.usd_value)/splitData(c_out.usd_value)),
+		tracking_obj = Tracking.objects.create(
+			currency_in=c_in,
+			currency_out=c_out,
+			amount_in=step_1['amount'],
+			amount_out=float(step_1['amount'])*(splitData(c_in.usd_value)/splitData(c_out.usd_value)),
 
 
-				name_sender = step_1['firstname'],
-				subname_sender = step_1['lastname'],
-				phone_sender = step_1['number'],
+			name_sender = step_1['firstname'],
+			phone_sender = step_1['number'],
 
-				name_reciever = step_2['firstname'],
-				subname_reciever = step_2['lastname'],
-				phone_reciever = step_2['number'],
-				)
-			tracking_obj.ecocash = eco_form['ecocash']
-			tracking_obj.ecocash_holder = eco_form['ecocash_holder']
-			tracking_obj.save()
+			name_reciever = step_2['firstname'],
+			phone_reciever = step_2['number'],
+			alt_phone_reciever = step_2['alt_number'],
+			)
+		tracking_obj.save()
+		if(tracking_obj):
 			messages.success(request, "Vos informations ont été envoyées avec success. Notre équipe se charge de la suite. N'hésitez surtout pas à nous contacter sur whatsapp si vous avez des questions")
 			return redirect(index)
 		else:
 			messages.error(request,"Une erreur de saisie est survenue, veuillez réessayer")
 			return redirect(index)
-
-	if "lumiform" in request.POST:
-		if lumicash_form.is_valid():
-			lumicash_data = lumicash_form.cleaned_data
-			first_ = request.session.pop('first_form',{})
-			step_1 = request.session.pop('step_form1',{})
-			step_2 = request.session.pop('step_form2',{})
-			c_in = Country.objects.get(usd_value=first_['country_from'])
-			c_out = Country.objects.get(usd_value=first_['country_to'])
-
-			tracking_obj = Tracking.objects.create(
-				currency_in=c_in,
-				currency_out=c_out,
-				amount_in=step_1['amount'],
-				amount_out=float(step_1['amount'])*(splitData(c_in.usd_value)/splitData(c_out.usd_value)),
-
-
-				name_sender = step_1['firstname'],
-				subname_sender = step_1['lastname'],
-				phone_sender = step_1['number'],
-
-				name_reciever = step_2['firstname'],
-				subname_reciever = step_2['lastname'],
-				phone_reciever = step_2['number'],
-				)
-			tracking_obj.lumicash = lumicash_data['lumicash']
-			tracking_obj.lumicash_holder = lumicash_data['lumicash_holder']
-			tracking_obj.save()
-			messages.success(request, "Vos informations ont été envoyées avec success. Notre équipe se charge de la suite. N'hésitez surtout pas à nous contacter sur whatsapp si vous avez des questions")
-			return redirect(index)
-		else:
-			messages.error(request,"Une erreur de saisie est survenue, veuillez réessayer")
-			return redirect(index)
-
-	if "receveur" in request.POST:
-		if livraison_form.is_valid(): 
-			livraison_data = livraison_form.cleaned_data
-			first_ = request.session.pop('first_form',{})
-			step_1 = request.session.pop('step_form1',{})
-			step_2 = request.session.pop('step_form2',{})
-			c_in = Country.objects.get(usd_value=first_['country_from'])
-			c_out = Country.objects.get(usd_value=first_['country_to'])
-
-			tracking_obj = Tracking.objects.create(
-				currency_in=c_in,
-				currency_out=c_out,
-				amount_in=step_1['amount'],
-				amount_out=float(step_1['amount'])*(splitData(c_in.usd_value)/splitData(c_out.usd_value)),
-
-
-				name_sender = step_1['firstname'],
-				subname_sender = step_1['lastname'],
-				phone_sender = step_1['number'],
-
-				name_reciever = step_2['firstname'],
-				subname_reciever = step_2['lastname'],
-				phone_reciever = step_2['number'],
-				)
-			tracking_obj.tel_livraison = livraison_data['num_receveur']
-			tracking_obj.save()
-			messages.success(request, "Vos informations ont été envoyées avec success. Notre équipe se charge de la suite. N'hésitez surtout pas à nous contacter sur whatsapp si vous avez des questions")
-			return redirect(index)
-		else:
-			messages.error(request,"Une erreur de saisie est survenue, veuillez réessayer")
-			return redirect(index)
-
-	if "compteform" in request.POST:
-		if compte_form.is_valid():
-			compte_data = compte_form.cleaned_data
-			first_ = request.session.pop('first_form',{})
-			step_1 = request.session.pop('step_form1',{})
-			step_2 = request.session.pop('step_form2',{})
-			c_in = Country.objects.get(usd_value=first_['country_from'])
-			c_out = Country.objects.get(usd_value=first_['country_to'])
-
-			tracking_obj = Tracking.objects.create(
-				currency_in=c_in,
-				currency_out=c_out,
-				amount_in=step_1['amount'],
-				amount_out=float(step_1['amount'])*(splitData(c_in.usd_value)/splitData(c_out.usd_value)),
-
-
-				name_sender = step_1['firstname'],
-				subname_sender = step_1['lastname'],
-				phone_sender = step_1['number'],
-
-				name_reciever = step_2['firstname'],
-				subname_reciever = step_2['lastname'],
-				phone_reciever = step_2['number'],
-				)
 			
-			tracking_obj.account_number = compte_data['account_number']
-			tracking_obj.account_holder = compte_data['account_holder']
-			tracking_obj.bank_name = compte_data['bank_name']
-			tracking_obj.save()
-			messages.success(request, "Vos informations ont été envoyées avec success. Notre équipe se charge de la suite. N'hésitez surtout pas à nous contacter sur whatsapp si vous avez des questions")
-			return redirect(index)
-		else:
-			messages.error(request,"Une erreur de saisie est survenue, veuillez réessayer")
-			return redirect(index)
 	return render(request, 'steps_forms.html', locals())
+
+
 
 @login_required(login_url=('login'))
 def AdminView(request):
@@ -337,30 +215,4 @@ def update(request, country_id):
 	form = CountryForm(instance=country)
 	return render(request, "forms.html", locals())
 
-def about(request):
-	form = ConversionForm(request.POST)
-	if "action" in request.POST:
-		if form.is_valid():
-			request.session['first_form'] = form.cleaned_data
-			return redirect(choice)
-	return render(request, 'about.html', locals())
 
-def contact(request):
-	form = ConversionForm(request.POST)
-	form2 = ContactForm(request.POST)
-	if(request.method == 'POST'):
-		if 'send' in request.POST:
-			if(form2.is_valid()):
-				subject = form2.cleaned_data['subject']
-				message = form2.cleaned_data['message']
-				from_ = form2.cleaned_data['from_']
-				to_ = 'cconverter@gmail.com'
-				send_mail(
-				    subject,
-				    message,
-				    from_,
-				    [to_,],
-				    fail_silently=False,
-				)
-
-	return render(request, 'contact.html', locals())
