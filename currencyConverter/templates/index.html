@@ -1,0 +1,290 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+	{% block titre %}<title>Instant Transfer | Quick , Simple & Economic</title>{% endblock %}
+	<meta charset="UTF-8">
+	<meta name="description" content="loans HTML Template">
+	<meta name="keywords" content="loans, html">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<!-- Favicon -->
+	<link href=" {% static 'img/favicon.ico' %}" rel="shortcut icon"/>
+
+	<!-- Google font 
+	<link href=" {% static '' %} https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet">-->
+ 
+	<!-- Stylesheets -->
+	<link rel="stylesheet" href=" {% static 'css/bootstrap.min.css' %} "/>
+	<link rel="stylesheet" href=" {% static 'css/font-awesome.min.css' %} "/>
+	<link rel="stylesheet" href=" {% static 'css/owl.carousel.min.css' %} "/>
+	<link rel="stylesheet" href=" {% static 'css/flaticon.css' %} "/>
+	<link rel="stylesheet" href=" {% static 'css/slicknav.min.css' %} "/>
+
+	<!-- Main Stylesheets -->
+	<link rel="stylesheet" href=" {% static 'css/style.css' %} "/>
+
+	<style type="text/css">
+		#prev:hover{
+			cursor: pointer;
+		}
+	</style>
+
+
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+</head>
+<body>
+	{% block header %}
+
+	<!-- Header Section -->
+	
+	<header class="header-section">
+		     {% if messages %}
+                {% for message in messages %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                  <div class="alert alert-success alert-dismissible fade show text-center" id="success-alert" role="alert">
+                     {{ message }}
+                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  {% endif %}
+                  {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                    <div class="alert alert-danger alert-dismissible fade show text-center" id="danger-alert" role="alert">
+                       {{ message }}
+                       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+              {% endif %}
+		<a href="/" class="site-logo">
+			<img src=" {% static 'img/logo--5.png' %} " alt="">
+		</a>
+		<nav class="header-nav">
+			<ul class="main-menu">
+				<li><a href="{% url 'home' %}" class="active">Accueil</a></li>
+				<li><a href="{% url 'contact' %}">Contact</a></li>
+				<li><a href="{% url 'about' %}">A propos de nous</a></li>
+				{% if user.is_authenticated and user.is_superuser %}
+					<li><a href="{% url 'requests' %}">Demandes</a></li>
+					<li><a href="{% url 'admin' %}">Taux</a></li>
+					<li><a href="{% url 'logout' %}">Deconnexion</a></li>
+				{% endif %}
+				
+			</ul>
+
+			<div class="header-right">
+				<div class="hr-btn hr-btn-2">
+					<a href="https://api.whatsapp.com/send?phone=+1 (438) 928-4750" target="_blank" class="text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                      +1 (438) 928-4750</a></div>
+			</div>
+		</nav>
+	</header>
+	<!-- Header Section end -->
+
+	{% endblock header %}
+
+	{% block banner %}
+		
+	{% endblock banner %}
+
+	{% block content %}
+
+	<!-- Hero Section end -->
+		<section class="hero-section" id="tarrif">
+		<div class="container">
+			<div class="row">
+				{% block aside %}
+					
+				<div class="col-lg-6">
+					<div class="hs-text">
+						<h2><strong><i class="fa fa-bell"></i>Instant Transfer</strong></h2>
+						<p>
+							Transférer de l'argent d'un pays à un autre n'a jamais été facile surtout à cause du taux de transfert élevé et une longue période d'attente.</br> Recevez et envoyez de l'argent facilement et rapidement avec <span class="color-primary">Instant Transfer.</span>
+						</p>
+
+
+						<p>
+						  <button class="site-btn" type="button" >Taux : {{sender.usd_value}} {{sender.currency}} = {{rc_value}} {{reciever.currency}}</button>
+						</p>
+						<p>
+						  	
+						<div class="site-btn">
+							<a href="https://api.whatsapp.com/send?phone=+1 (438) 928-4750" class="text-white">
+		                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+		                      +1 (438) 928-4750</a></div>
+						</p>
+					
+					</div>
+					
+				</div>
+				{% endblock aside %}
+
+				{% block convert %}
+				
+				<div class="col-lg-6">
+					<div class="row mb-2">
+						    <div class="col">
+						      <button type="button" id="wantSendBtn" class=" form-control btn btn-success btn-sm" >Je veux envoyer</button>
+						    </div>
+						    <div class="col">
+						      <button type="button" id="wantRecieveBtn" class=" form-control btn btn-success btn-sm">Qu'il/elle recoive</button>
+						    </div>
+						</div>
+					<!--SEND FORM-->
+					<form  class="hero-form " method="post" action="." id="wantSendDiv">
+						  {% csrf_token %}
+						<div class=" mt-5"  >
+							<div class="row ">
+							    <div class="col col-sm-7">
+							      <input type="number" name="inputsend" id="inputSender" class=" form-control" required>
+							    </div>
+							    <div class="col col-sm-5">
+							          <select class="form-control" name="outputsend" id="fromToSender">
+								        <option value="{{ sender.usd_value }}|{{ reciever.usd_value }}">{{ sender.currency }}</option>
+								      </select>
+							    </div>
+							</div>
+							<div class="row mb-2"  >
+								<div class="col" >
+									<div id="messageSender" style="display:none;" class="text-white mb-2" >Il/Elle recevra : </div>
+									<div id="displaySend" class="btn btn-light btn-block" >0</div>
+								</div>
+							</div>
+						</div>
+						<input  type="submit" name="send" value="Interessée? Passez à l'action en cliquant ici !" class="btn btn-primary btn-block text-white mt-2">
+						<a  type="button" href="{% url "home" %}" class="btn btn-outline-danger text-white mt-2 btn-block">Cliquer pour Actualiser le taux</a>
+					</form>
+					<!-- RECIEVE FORM -->
+
+					<form  class="hero-form " method="post"  style="display:none;" action="." id="wantRecieveDiv">
+					{% csrf_token %}
+						  
+						<div class=" mt-5" >
+							<div class="row mt-2">
+							    <div class="col col-sm-7">
+							      <input type="number" id="inputReciever" name="inputrecieve"  class=" form-control" required>
+							    </div>
+							    <div class="col col-sm-5">
+							          <select class="form-control" name="outputrecieve" id="fromToReciever">
+								        <option value="{{ reciever.usd_value }}|{{ sender.usd_value }}">{{ reciever.currency }}</option>
+								      </select>
+							    </div>
+							</div>
+							<div class="row mb-2" >
+								<div class="col" >
+									<div id="messageReciever" style="display:none;" class="text-white mb-2" >Tu devras envoyer : </div>
+									<div id="displayReciever" class="btn btn-light btn-block" >0</div>
+								</div>
+							</div>
+						</div>
+						<input  type="submit" name="recieve" value="Interessée? Passez à l'action en cliquant ici !" class="btn btn-primary btn-block text-white mt-2">
+						<a  type="button" href="{% url "home" %}" class="btn btn-outline-danger text-white mt-2 btn-block">Cliquer pour Actualiser le taux</a>
+					</form>
+				</div>
+
+				{% endblock convert %}
+			</div>
+		</div>
+		<div class="hero-slider owl-carousel">
+			<div class="hs-item set-bg" data-setbg=" {% static 'img/bg/bg-1.jpg' %} "></div>
+		</div>
+	</section>
+	<!-- Hero Section end -->
+
+	{% endblock content %}
+
+	{% block why_us %}
+
+	<!-- Why Section end -->
+	<section class="why-section spad">
+		<div class="container">
+			<div class="text-center mb-5 pb-4">
+				<h2>Pourqoui choisir <span class="color-primary">Instant Transfer?</span></h2>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="icon-box-item">
+						<div class="ib-icon">
+							<i class="flaticon-012-24-hours"></i>
+						</div>
+						<div class="ib-text">
+							<h5>Instant Transfer</h5>
+							<p>Avec nous, le transfert d'argent du Canada au Burundi est simple,rapide et facile. </p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="icon-box-item">
+						<div class="ib-icon">
+							<i class="flaticon-036-customer-service"></i>
+						</div>
+						<div class="ib-text">
+							<h5>Taux à faible coût</h5>
+							<p><span class="color-primary">Instant Transfer</span> offre un service de transfert efficace, et ce à un taux compétitif.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="icon-box-item">
+						<div class="ib-icon">
+							<i class="flaticon-039-info"></i>
+						</div>
+						<div class="ib-text">
+							<h5>Comment ça marche?</h5>
+							<p>c'est simple. Calculez le montant à transferer en  utilisant notre calculateur en ligne puis faites votre transfert via interac au numero ****</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="text-center pt-3">
+				<a href="#tarrif" class="site-btn sb-big">Taux du jour</a>
+			</div>
+		</div>
+	</section>
+	<!-- Why Section end -->
+{% endblock why_us %}
+
+{% block find_more %}
+	<!-- CTA Section end -->
+	<section class="cta-section set-bg" data-setbg=" {% static 'img/cta-bg.jpg' %} ">
+		<div class="container">
+			<h3>Voulez vous savoir plus sur <strong class="color-primary">Instant Transfer</strong>?</h3>
+			<h5>contactez nous pour plus d'informations</h5>
+			<a href="#" class="site-btn sb-dark sb-big"><i class="flaticon-029-telephone-1"></i> +257 61 460 068</a>
+		</div>
+	</section>
+	<!-- CTA Section end -->
+{% endblock find_more %}
+
+	<!-- Footer Section -->
+	<footer class="footer-section">
+		<div class="container">
+			<div class="text-center">
+				
+			<span class="text-white text-center text-footer">
+			Copyright &copy;<script>document.write(new Date().getFullYear());</script> | <strong ><span class="text-danger">Instant</span> <span class="text-warning">Transfer</span> - Simple, Rapide & Economique</strong>				
+			</span>
+			</div>
+		</div>
+	</footer>
+	<!-- Footer Section end -->
+	
+	<!--====== Javascripts & Jquery ======-->
+	<script src=" {% static 'js/jquery-3.2.1.min.js' %}"></script>
+	<script src=" {% static 'js/bootstrap.min.js' %}"></script>
+	<script src=" {% static 'js/jquery.slicknav.min.js' %}"></script>
+	<script src=" {% static 'js/owl.carousel.min.js' %}"></script>
+	<script src=" {% static 'js/jquery-ui.min.js' %}"></script>
+	<script src=" {% static 'js/main.js' %}"></script>
+	<script src="{% static 'js/instant_transfer.js' %}"></script>
+	
+	</body>
+</html>

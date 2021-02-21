@@ -1,0 +1,107 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block titre %}<title>Admin | Currency Converter</title>{% endblock %}
+
+{% block banner %}
+    <!-- Page top Section end -->
+    <section class="page-top-section set-bg" data-setbg="{% static 'img/page-top-bg/4.jpg' %} ">
+        <div class="container">
+            <h2>Admin</h2>
+            <nav class="site-breadcrumb">
+                <a class="sb-item" href="#">Home</a>
+                <span class="sb-item active">Admin</span>
+            </nav>
+        </div>
+    </section>
+    <!-- Page top Section end -->
+
+{% endblock banner %}
+
+{% block content %}
+
+<section class="admin-section spad">
+    {% if adm %}
+    
+	    <div class="container">
+	      <div class="row justify-content-center">
+	        <div class="col-md-7 heading-section ftco-animate text-center">
+	          <div class="card-body m-auto">
+	              <form method="post" action=".">
+	              	{% csrf_token %}
+	              	<button type="submit" name="addCurrency" class="btn btn-outline-success">
+                            Set Occurency
+                    </button>
+	              </form>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+
+        <div class="container">
+                <div class="table-responsive">
+                  <h2 class="sub-header ">List Currency</h2>
+                    <table class="table table-striped table-hover">
+                      <thead>
+                      	<tr>
+                            <th >
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input checkAll">
+                                    <label class="form-check-label">Id</label>
+                                </div>
+                            </th>
+                            <th>Name</th>
+                            <th>Currency</th>
+                            <th>USD Value</th>
+                            <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for country in countries %}
+        	                <tr>
+        	                    <td class="col-md-1">
+        	                        <div class="form-check">
+        	                            <input type="checkbox" class="form-check-input">
+        	                            <label class="form-check-label">{{ country.id }}</label>
+        	                        </div>
+        	                    </td>
+        	                    <td >{{ country.name }}</td>
+        	                    <td >{{ country.currency }}</td>
+        	                    <td >{{ country.usd_value }}</td>
+        	                    <td >
+        	                        <a type="button" href="{% url 'update' country.id %}" class="btn btn-primary btn-sm">Update</a>
+        	                    </td>
+        	                </tr>
+        	               {% endfor %} 
+                      </tbody>
+                    </table>
+                  
+                </div>
+        </div>
+          
+    	<div class="section " >
+    	    <div class="container">
+    	      <div class="row justify-content-center">
+    	        <div class="col-md-7 heading-section ftco-animate text-center">
+    	          <div class="card-body m-auto">
+    	              <form method="post" action=".">
+    	              	{% csrf_token %}
+                            <button type="submit" name="addCurrency" class="btn btn-outline-success">
+                                Set Occurency
+                            </button>
+    	              </form>
+    	          </div>
+    	        </div>
+    	      </div>
+    	    </div>
+        </div>
+    {% endif %}
+
+</section>
+
+{% endblock content %}
+
+{%  block why_us %}
+{% endblock %}
+
+{% block find_more %}
+{% endblock %}
