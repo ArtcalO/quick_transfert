@@ -1,0 +1,10 @@
+*.pyc
+
+/migrations/*
+!migrations/__init__.py
+
+/media/
+
+000?_*.py
+
+*.sqlite3
