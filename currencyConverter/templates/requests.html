@@ -41,20 +41,8 @@
                                 <td >{{ tracking.senderFullName }}</td>
                                 <td >{{ tracking.recieverFullName }}</td>
                                 <td >{{ tracking.phone_reciever }}</td>
-                                <td >
-                                    {% if tracking.montantRecuAdmin %}
-                                        {{ tracking.montantDepart }}
-                                    {% else %}
-                                        {{ tracking.montantRecuAdmin }}
-                                    {% endif %}
-                                </td>
-                                <td >
-                                {% if  tracking.montantArriveAdmin %}
-                                        {{ tracking.montantArrive }}
-                                    {% else %}
-                                        {{ tracking.montantArriveAdmin }}
-                                    {% endif %}
-                                </td>
+                                <td >{{ tracking.amount_out|floatformat:2 }} {{tracking.currency_out.currency}}</td>
+                                <td >{{ tracking.amount_in|floatformat:2 }} {{tracking.currency_in.currency}}</td>
                                 <td >
                                     {% if  not tracking.validated1 %}
                                         <a href="{% url 'recu' tracking.id %}" class="btn btn-primary btn-sm">Receive validation</a>

@@ -131,8 +131,9 @@
 					var values_sender = $("#fromToReciever").val();
 					var values_sender_splited = splitValues(values_sender);
 					var value_from = reverseValue(values_sender_splited[0]);
+					var usd = reverseValue(values_sender_splited[1]);
 					var final_amount = amount/value_from;
-					final_amount = final_amount/0.12;
+					final_amount = final_amount/usd;
 					x = final_amount/90;
 					mt = x*100;
 					$("#displayReciever").text(''+separatedNumber(mt.toFixed(2))+'	NK');

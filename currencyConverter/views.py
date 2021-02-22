@@ -29,10 +29,6 @@ def index(request):
 	rc_value = reciever.usd_value.split('/')[1]
 	if "send" in request.POST:
 		amount = float(request.POST.get('inputsend'))
-		haveToSend = request.POST.get('haveToSend')
-		print("##################")
-		print(haveToSend)
-		print("##################")
 		data = {'country_from': sender.usd_value, 'country_to': reciever.usd_value, 'amount': amount}
 		request.session['first_form'] = data
 		amount_ = float(request.POST.get('inputsend'))
@@ -114,6 +110,8 @@ def step2(request):
 			phone_reciever = step_2['number'],
 			alt_phone_reciever = step_2['alt_number'],
 			)
+		x = tracking_obj.amount_out/90
+		tracking_obj.amount_out = x*100
 		tracking_obj.save()
 		if(tracking_obj):
 			messages.success(request, "Your information has been sent successfully. Our team takes care of the rest. Please do not hesitate to contact us on whatsapp if you have any questions")
