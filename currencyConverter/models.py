@@ -3,10 +3,12 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 # Create your models here.
 class Profil(models.Model):
+	id=models.BigAutofield(primary_key=True)
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	phone = models.IntegerField()
 
 class Country(models.Model):
+	id=models.BigAutofield(primary_key=True)
 	name = models.CharField(max_length=20)
 	currency = models.CharField(max_length=20)
 	usd_value = models.CharField(max_length=20)
@@ -15,6 +17,7 @@ class Country(models.Model):
 		return f"{self.name}(1{self.currency}={self.usd_value}$)"
 
 class TransactionPercent(models.Model):
+	id=models.BigAutofield(primary_key=True)
 	trans_percent = models.FloatField()
 
 	def __str__(self):
@@ -22,6 +25,7 @@ class TransactionPercent(models.Model):
 
 
 class Tracking(models.Model):
+	id=models.BigAutofield(primary_key=True)
 	currency_in = models.ForeignKey(Country, related_name='curr_in', on_delete=models.CASCADE)
 	currency_out = models.ForeignKey(Country, related_name='curr_out', on_delete=models.CASCADE)
 	amount_in = models.FloatField()
