@@ -107,7 +107,7 @@
 
 			function senderAction(){
 				var amount = parseFloat($("#inputSender").val());
-				amount = amount-(amount*10/100);
+				amount = amount-(amount*15/100);
 				if(amount){
 					$("#messageSender").show();
 					var values_sender = $("#fromToSender").val();
