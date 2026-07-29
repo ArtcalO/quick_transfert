@@ -145,7 +145,7 @@ jQuery(document).ready(function ($) {
             var final_amount = amount / value_from;
             final_amount = final_amount / usd;
 
-            var x = final_amount / 90;
+            var x = final_amount / 85;
             var mt = x * 100;
 
             $("#displayReciever").text(separatedNumber(mt) + ' NK');
