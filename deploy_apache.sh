@@ -29,6 +29,13 @@
 #       --force             Overwrite an existing vhost/port conf without asking
 #   -h, --help              Show this help
 #
+
+# Re-exec under bash if invoked via `sh ./deploy_apache.sh` or similar — this
+# script relies on bash-only syntax ([[, arrays, $EUID, etc).
+if [ -z "${BASH_VERSION:-}" ]; then
+    exec bash "$0" "$@"
+fi
+
 set -euo pipefail
 
 # ---------------------------------------------------------------------------
