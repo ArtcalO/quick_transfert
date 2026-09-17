@@ -56,15 +56,16 @@ done
 SITES_DIR="/etc/apache2/sites-available"
 
 list_apps() {
-    local f name port venv
+    local f name port venv domain
     info "Apps managed by deploy_apache.sh:"
     for f in "$SITES_DIR"/*.conf; do
         [[ -f "$f" ]] || continue
         grep -q "WSGIDaemonProcess" "$f" || continue
         name="$(basename "$f" .conf)"
         port="$(grep -oP '<VirtualHost \*:\K[0-9]+' "$f" | head -1)"
+        domain="$(grep -oP '^\s*ServerName\s+\K\S+' "$f" | head -1)"
         venv="$(grep -oP 'python-home=\K\S+' "$f" | head -1)"
-        printf "  - %-25s port=%-6s venv=%s\n" "$name" "$port" "$venv"
+        printf "  - %-25s domain=%-30s port=%-6s venv=%s\n" "$name" "$domain" "$port" "$venv"
     done
 }
 
@@ -80,10 +81,12 @@ VHOST_FILE="$SITES_DIR/${APP_NAME}.conf"
 [[ -f "$VHOST_FILE" ]] || die "No vhost found at $VHOST_FILE. Use --list to see known apps."
 
 PORT="$(grep -oP '<VirtualHost \*:\K[0-9]+' "$VHOST_FILE" | head -1)"
+DOMAIN="$(grep -oP '^\s*ServerName\s+\K\S+' "$VHOST_FILE" | head -1)"
 VENV_DIR="$(grep -oP 'python-home=\K\S+' "$VHOST_FILE" | head -1)"
 
 info "About to un-host '${APP_NAME}':"
 echo "    Vhost file   : $VHOST_FILE"
+echo "    Domain       : ${DOMAIN:-unknown}"
 echo "    Port         : ${PORT:-unknown}"
 echo "    Venv path    : ${VENV_DIR:-unknown}"
 echo "    Purge venv?  : $([[ $PURGE_VENV -eq 1 ]] && echo yes || echo no)"
@@ -139,4 +142,4 @@ fi
 echo
 ok "'${APP_NAME}' is un-hosted."
 echo "To recreate it, run deploy_apache.sh again from the project's directory:"
-echo "  sudo ./deploy_apache.sh -p <project-dir> -e <venv-parent-dir> -N <venv-name> -P <port> -n ${APP_NAME}"
+echo "  sudo ./deploy_apache.sh -p <project-dir> -e <venv-parent-dir> -N <venv-name> -d ${DOMAIN:-<domain>} -n ${APP_NAME}"

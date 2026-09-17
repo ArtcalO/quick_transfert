@@ -1,27 +1,37 @@
 #!/usr/bin/env bash
 #
 # deploy_apache.sh — deploy this Django project on a Debian/Ubuntu VPS behind
-# Apache + mod_wsgi, on its own custom port, isolated in its own virtualenv.
+# Apache + mod_wsgi, routed by subdomain (name-based virtual hosting) on the
+# standard HTTP port, isolated in its own virtualenv.
+#
+# Why subdomain instead of a custom port: on VPS providers that put the box
+# behind NAT with only specific ports forwarded (e.g. SSH via a custom port
+# like 28001 -> 22), an arbitrary app port is unreachable from the internet
+# unless a matching forward rule is added on the provider's panel. Port 80 is
+# almost always already open, so routing multiple apps by ServerName on the
+# same port 80 sidesteps that entirely — this is standard Apache name-based
+# virtual hosting, the same mechanism shared web hosts use.
 #
 # Designed to be run FROM INSIDE the project's repo on the server, once the
 # code has been uploaded/cloned there. It is generic: it reads manage.py to
 # find the settings/wsgi package, so the same script can be reused (copied
 # into another Django repo) to host several apps side by side on one Apache,
-# each on its own port and its own venv.
+# each on its own subdomain and its own venv.
 #
 # Usage (interactive):
 #   sudo ./deploy_apache.sh
 #
 # Usage (non-interactive):
-#   sudo ./deploy_apache.sh -p /var/www/quick_transfert -e /var/www/venvs -N quick_transfert -P 8081
+#   sudo ./deploy_apache.sh -p /var/www/quicktransfert -e /var/www/venvs -N quicktransfert -d ip.mefi-opportunity.com
 #
 # Flags:
 #   -p, --project-dir DIR   Absolute path of the project on this server (default: this script's dir)
 #   -e, --venv-dir DIR      Folder that will hold the virtualenv (e.g. /var/www/venvs)
 #   -N, --venv-name NAME    Name of the virtualenv to create inside --venv-dir (default: app name)
-#   -P, --port PORT         TCP port Apache will listen on for this app (required)
+#   -d, --domain NAME       Subdomain/domain this app answers to (e.g. ip.mefi-opportunity.com) — required
 #   -n, --app-name NAME     Identifier for vhost/log/process names (default: basename of project dir)
-#   -s, --server-name NAME  Apache ServerName (default: server public IP, falls back to "_")
+#   -P, --port PORT         TCP port Apache listens on (default: 80 — leave this alone unless you
+#                           specifically need a non-standard port and have it forwarded already)
 #       --python BIN        Python interpreter used to create the venv (default: python3)
 #       --no-firewall       Do not touch ufw even if it is active
 #       --no-migrate        Skip "manage.py migrate"
@@ -47,7 +57,7 @@ ok()    { echo "${c_grn}[OK]${c_rst} $*"; }
 warn()  { echo "${c_yel}[!]${c_rst} $*"; }
 die()   { echo "${c_red}[ERROR]${c_rst} $*" >&2; exit 1; }
 
-usage() { sed -n '2,31p' "$0"; }
+usage() { sed -n '2,41p' "$0"; }
 
 ask() {
     # ask <prompt> <default> -> echoes the answer
@@ -84,7 +94,7 @@ while [[ $# -gt 0 ]]; do
         -N|--venv-name) VENV_NAME="$2"; shift 2 ;;
         -P|--port) PORT="$2"; shift 2 ;;
         -n|--app-name) APP_NAME="$2"; shift 2 ;;
-        -s|--server-name) SERVER_NAME="$2"; shift 2 ;;
+        -d|--domain|-s|--server-name) SERVER_NAME="$2"; shift 2 ;;
         --python) PYTHON_BIN="$2"; shift 2 ;;
         --no-firewall) DO_FIREWALL=0; shift ;;
         --no-migrate) DO_MIGRATE=0; shift ;;
@@ -133,17 +143,17 @@ VENV_PARENT_DIR="$(cd -- "$VENV_PARENT_DIR" &>/dev/null && pwd)" || die "Could n
 VENV_DIR="$VENV_PARENT_DIR/$VENV_NAME"
 
 # ---------------------------------------------------------------------------
-# step 3: port
+# step 3: domain (subdomain this app answers to) — required, no auto-guessing
 # ---------------------------------------------------------------------------
-if [[ -z "$PORT" ]]; then
-    PORT="$(ask "Port for Apache to serve this app on" "8080")"
-fi
-[[ "$PORT" =~ ^[0-9]+$ ]] || die "Port must be numeric: $PORT"
-
 if [[ -z "$SERVER_NAME" ]]; then
-    SERVER_NAME="$(curl -fsS -m 3 https://ifconfig.me 2>/dev/null || curl -fsS -m 3 https://api.ipify.org 2>/dev/null || echo "")"
-    SERVER_NAME="${SERVER_NAME:-_}"
+    SERVER_NAME="$(ask "Subdomain/domain this app answers to (e.g. ip.mefi-opportunity.com)" "")"
 fi
+[[ -n "$SERVER_NAME" ]] || die "A domain/subdomain is required (e.g. ip.mefi-opportunity.com)."
+
+# Port defaults to 80 (standard HTTP, routed by ServerName). Only override
+# this if you know a different port is already forwarded for you.
+PORT="${PORT:-80}"
+[[ "$PORT" =~ ^[0-9]+$ ]] || die "Port must be numeric: $PORT"
 
 info "Summary:"
 echo "    App name     : $APP_NAME"
@@ -151,8 +161,8 @@ echo "    Project dir  : $PROJECT_DIR"
 echo "    Venv folder  : $VENV_PARENT_DIR"
 echo "    Venv name    : $VENV_NAME"
 echo "    Venv path    : $VENV_DIR"
+echo "    Domain       : $SERVER_NAME"
 echo "    Port         : $PORT"
-echo "    Server name  : $SERVER_NAME"
 echo "    Python       : $PYTHON_BIN"
 echo
 
@@ -274,8 +284,13 @@ if [[ $DO_FIREWALL -eq 1 ]] && command -v ufw >/dev/null 2>&1; then
     fi
 fi
 
+REACHABLE_URL="http://${SERVER_NAME}/"
+[[ "$PORT" != "80" ]] && REACHABLE_URL="http://${SERVER_NAME}:${PORT}/"
+
 echo
-ok "Deployed. App should be reachable at: http://${SERVER_NAME}:${PORT}/"
+ok "Deployed. App should be reachable at: ${REACHABLE_URL}"
+echo
+echo "Make sure the DNS A record for '${SERVER_NAME}' points at this server's public IP."
 echo
 echo "Next steps:"
 echo "  - Create a Django superuser if needed:"
@@ -284,4 +299,5 @@ echo "  - settings.py currently has DEBUG = True and a hardcoded SECRET_KEY;"
 echo "    for a real production deployment, flip DEBUG to False and move"
 echo "    SECRET_KEY/EMAIL credentials to environment variables."
 echo "  - To host another app on this same server, copy this script into that"
-echo "    app's repo and run it again with a different --venv-name and --port."
+echo "    app's repo and run it again with a different --venv-name and --domain"
+echo "    (they can all share port 80 as long as each has its own domain)."
